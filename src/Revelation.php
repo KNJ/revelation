@@ -14,6 +14,16 @@ class Revelation
         $this->original = $original;
     }
 
+    public function __get($prop)
+    {
+        $closure = function ($prop) {
+            return $this->$prop;
+        };
+        $fn = $closure->bindTo($this->original, $this->original);
+
+        return $fn($prop);
+    }
+
     public function __call($method, $args)
     {
         $self = $this;
