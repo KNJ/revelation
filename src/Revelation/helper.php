@@ -4,7 +4,7 @@ namespace Wazly\Revelation;
 
 use Wazly\Revelation;
 
-function reveal($obj)
+function reveal($obj, ...$args)
 {
-    return Revelation::new($obj);
+    return Revelation::new($obj, ...$args);
 }

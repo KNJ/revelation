@@ -2,16 +2,34 @@
 
 namespace Wazly;
 
-class Revelation
+use InvalidArgumentException;
+
+class Revelation implements RevelationInterface
 {
-    public static function new($obj)
+    protected $original;
+
+    public static function new($obj, ...$args)
     {
-        return new static($obj);
+        return new static($obj, ...$args);
     }
 
-    public function __construct($original)
+    public function __construct($original, ...$args)
     {
-        $this->original = $original;
+
+        if ($original instanceof RevelationInterface) {
+            throw new InvalidArgumentException('Argument 1 must not be an instance of RevelationInterface.');
+        } elseif (is_object($original)) {
+            $this->original = $original;
+        } elseif (is_string($original)) {
+            $this->original = new $original(...$args);
+        } else {
+            throw new InvalidArgumentException('Argument 1 must be a type of object or string.');
+        }
+    }
+
+    public function getOriginal()
+    {
+        return $this->original;
     }
 
     public function __get($prop)
