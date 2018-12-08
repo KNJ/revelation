@@ -11,7 +11,8 @@ final class ImmutableObjectTest extends TestCase
 {
     public function setUp()
     {
-        $this->obj = Revelation::new(new Immutable);
+        $this->original = new Immutable;
+        $this->obj = Revelation::new($this->original);
         $this->exObj = Revelation::new(new class extends Immutable {
             protected static function returnClassName()
             {
@@ -23,6 +24,11 @@ final class ImmutableObjectTest extends TestCase
     public function testSingleArgument()
     {
         $this->assertSame('testing', $this->obj->returnSameValue('testing'));
+    }
+
+    public function testReturnThis()
+    {
+        $this->assertSame($this->original, $this->obj->returnThisObject());
     }
 
     public function testStaticMethod()
