@@ -34,15 +34,8 @@ class Revelation implements RevelationInterface
 
     public function getStatic($property)
     {
-        $self = $this;
-        $closure = function ($original, $property) use ($self) {
-            $return = get_class($original)::$$property;
-
-            if ($return === $this) {
-                $return = $self;
-            }
-
-            return $return;
+        $closure = function ($original, $property) {
+            return get_class($original)::$$property;
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
