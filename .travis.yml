@@ -8,6 +8,11 @@ before_install:
 install:
   - travis_retry composer install --prefer-source --no-interaction
 script:
-  - vendor/bin/phpunit --coverage-text
+  - composer test -- --coverage-clover=coverage.xml
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+cache:
+  directories:
+    - $HOME/.composer/cache
 notifications:
   email: false
