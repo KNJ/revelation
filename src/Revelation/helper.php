@@ -6,5 +6,5 @@ use Wazly\Revelation;
 
 function reveal($obj, ...$args)
 {
-    return Revelation::new($obj, ...$args);
+    return Revelation::wrap($obj, ...$args);
 }

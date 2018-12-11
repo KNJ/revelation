@@ -12,7 +12,7 @@ final class ConstructorTest extends TestCase
 {
     public function testCreatedObjectRevelation()
     {
-        $obj = Revelation::new(new Constructor('a', 'b'));
+        $obj = Revelation::wrap(new Constructor('a', 'b'));
         $this->assertInstancesAndProperties($obj);
 
         return $obj;
@@ -20,7 +20,7 @@ final class ConstructorTest extends TestCase
 
     public function testCreatingObjectRevelation()
     {
-        $obj = Revelation::new(Constructor::class, 'a', 'b');
+        $obj = Revelation::wrap(Constructor::class, 'a', 'b');
         $this->assertInstancesAndProperties($obj);
     }
 
@@ -29,7 +29,7 @@ final class ConstructorTest extends TestCase
      */
     public function testInvalidValueRevelation()
     {
-        Revelation::new([], 'a', 'b');
+        Revelation::wrap([], 'a', 'b');
     }
 
     /**
@@ -38,7 +38,7 @@ final class ConstructorTest extends TestCase
      */
     public function testRevelationOfRevelation(RevelationInterface $obj)
     {
-        Revelation::new($obj, 'a', 'b');
+        Revelation::wrap($obj, 'a', 'b');
     }
 
     private function assertInstancesAndProperties($obj)

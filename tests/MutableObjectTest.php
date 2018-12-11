@@ -11,9 +11,9 @@ final class MmutableObjectTest extends TestCase
 {
     public function setUp()
     {
-        $this->obj = Revelation::new(new Mutable);
-        $this->siblingObj = Revelation::new(new Mutable);
-        $this->exObj = Revelation::new(new class extends Mutable {});
+        $this->obj = Revelation::wrap(new Mutable);
+        $this->siblingObj = Revelation::wrap(new Mutable);
+        $this->exObj = Revelation::wrap(new class extends Mutable {});
     }
 
     public function testGetPrivateStaticProperty()

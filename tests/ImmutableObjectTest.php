@@ -12,8 +12,8 @@ final class ImmutableObjectTest extends TestCase
     public function setUp()
     {
         $this->original = new Immutable;
-        $this->obj = Revelation::new($this->original);
-        $this->exObj = Revelation::new(new class extends Immutable {
+        $this->obj = Revelation::wrap($this->original);
+        $this->exObj = Revelation::wrap(new class extends Immutable {
             protected static function returnClassName()
             {
                 return __CLASS__;

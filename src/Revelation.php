@@ -8,7 +8,7 @@ class Revelation implements RevelationInterface
 {
     protected $original;
 
-    public static function new($obj, ...$args)
+    public static function wrap($obj, ...$args)
     {
         return new static($obj, ...$args);
     }
