@@ -48,8 +48,15 @@ class Revelation implements RevelationInterface
 
     public function doStatic($method, ...$args)
     {
-        $closure = function ($original, $method, $args) {
-            return get_class($original)::$method(...$args);
+        $self = $this;
+        $closure = function ($original, $method, $args) use ($self) {
+            $return = get_class($original)::$method(...$args);
+
+            if ($return === $this) {
+                $return = $self;
+            }
+
+            return $return;
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
@@ -68,8 +75,15 @@ class Revelation implements RevelationInterface
 
     public function __call($method, $args)
     {
-        $closure = function ($original, $method, $args) {
-            return $original->$method(...$args);
+        $self = $this;
+        $closure = function ($original, $method, $args) use ($self) {
+            $return = $original->$method(...$args);
+
+            if ($return === $this) {
+                $return = $self;
+            }
+
+            return $return;
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
