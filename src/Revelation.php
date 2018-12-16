@@ -13,9 +13,13 @@ class Revelation implements RevelationInterface
         return new static($obj, ...$args);
     }
 
+    public static function clone($obj)
+    {
+        return new static(clone $obj);
+    }
+
     public function __construct($original, ...$args)
     {
-
         if ($original instanceof RevelationInterface) {
             throw new InvalidArgumentException('Argument 1 must not be an instance of RevelationInterface.');
         } elseif (is_object($original)) {

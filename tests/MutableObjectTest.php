@@ -7,7 +7,7 @@ namespace Tests;
 use Wazly\Revelation;
 use PHPUnit\Framework\TestCase;
 
-final class MmutableObjectTest extends TestCase
+final class MutableObjectTest extends TestCase
 {
     public function setUp()
     {
