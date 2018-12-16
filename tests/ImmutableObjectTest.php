@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use Wazly\Revelation;
+use Wazly\RevelationInterface;
 use PHPUnit\Framework\TestCase;
 
 final class ImmutableObjectTest extends TestCase
@@ -26,6 +27,11 @@ final class ImmutableObjectTest extends TestCase
         $this->assertSame('testing', $this->obj->returnSameValue('testing'));
     }
 
+    public function testReturnThis()
+    {
+        $this->assertInstanceOf(RevelationInterface::class, $this->obj->returnThis());
+    }
+
     public function testSameReference()
     {
         $this->assertSame($this->original, Revelation::wrap($this->original)->getOriginal());
@@ -38,23 +44,23 @@ final class ImmutableObjectTest extends TestCase
 
     public function testStaticMethod()
     {
-        $this->assertSame(13, $this->obj->doStatic('returnIncreasedValue', 3, 9));
+        $this->assertSame(13, $this->obj->callStatic('returnIncreasedValue', 3, 9));
     }
 
     public function testResolveClassName()
     {
-        $this->assertSame('Tests\\Immutable', $this->obj->doStatic('returnClassName'));
+        $this->assertSame('Tests\\Immutable', $this->obj->callStatic('returnClassName'));
     }
 
     public function testResolveSelfClassName()
     {
-        $this->assertSame('Tests\\Immutable', $this->obj->doStatic('getSelfClassName'));
-        $this->assertSame('Tests\\Immutable', $this->exObj->doStatic('getSelfClassName'));
+        $this->assertSame('Tests\\Immutable', $this->obj->callStatic('getSelfClassName'));
+        $this->assertSame('Tests\\Immutable', $this->exObj->callStatic('getSelfClassName'));
     }
 
     public function testResolveStaticClassName()
     {
-        $this->assertSame('Tests\\Immutable', $this->obj->doStatic('getStaticClassName'));
-        $this->assertNotSame('Tests\\Immutable', $this->exObj->doStatic('getStaticClassName'));
+        $this->assertSame('Tests\\Immutable', $this->obj->callStatic('getStaticClassName'));
+        $this->assertNotSame('Tests\\Immutable', $this->exObj->callStatic('getStaticClassName'));
     }
 }

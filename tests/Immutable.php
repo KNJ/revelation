@@ -14,6 +14,11 @@ class Immutable
         return $val;
     }
 
+    private function returnThis()
+    {
+        return $this;
+    }
+
     protected static function returnClassName()
     {
         return __CLASS__;

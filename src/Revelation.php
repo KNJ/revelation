@@ -58,15 +58,10 @@ class Revelation implements RevelationInterface
         return $fn($this->original, $property);
     }
 
-    public function doStatic(string $method, ...$args)
+    public function callStatic(string $method, ...$args)
     {
-        $self = $this;
-        $closure = function ($original, $method, $args) use ($self) {
+        $closure = function ($original, $method, $args) {
             $return = get_class($original)::$method(...$args);
-
-            if ($return === $this) {
-                $return = $self;
-            }
 
             return $return;
         };

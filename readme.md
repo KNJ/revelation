@@ -138,7 +138,7 @@ reveal($stuff)->privateMethod(1, 2)->privateMethod(3, 4);
 
 #### Static method and property
 
-`getStatic()` and `doStatic()` are available.
+`getStatic()` and `callStatic()` are available.
 
 ```php
 class A
@@ -170,7 +170,7 @@ class B extends A
 }
 
 echo reveal(B::class)->getStatic('staticProperty'); // static
-echo reveal(B::class)->doStatic('className');       // B
-echo reveal(B::class)->doStatic('selfName');        // A
-echo reveal(B::class)->doStatic('staticName');      // B
+echo reveal(B::class)->callStatic('className');       // B
+echo reveal(B::class)->callStatic('selfName');        // A
+echo reveal(B::class)->callStatic('staticName');      // B
 ```
