@@ -70,10 +70,10 @@ To create it with Stuff object, use `reveal()` helper function.
 use function Wazly\Revelation\reveal;
 
 $stuff = new Stuff(1, 2);
-$stuff = reveal($stuff);                // now $stuff is a Revelation object
-echo $stuff->privateProperty; // 3
+$stuff = reveal($stuff);       // now $stuff is a Revelation object
+echo $stuff->privateProperty;  // 3
 $stuff->privateMethod(1, 100);
-echo $stuff->privateProperty; // 101
+echo $stuff->privateProperty;  // 101
 ```
 
 #### Ways to create a Revelation object
@@ -170,7 +170,7 @@ class B extends A
 }
 
 echo reveal(B::class)->getStatic('staticProperty'); // static
-echo reveal(B::class)->callStatic('className');       // B
-echo reveal(B::class)->callStatic('selfName');        // A
-echo reveal(B::class)->callStatic('staticName');      // B
+echo reveal(B::class)->callStatic('className');     // B
+echo reveal(B::class)->callStatic('selfName');      // A
+echo reveal(B::class)->callStatic('staticName');    // B
 ```
