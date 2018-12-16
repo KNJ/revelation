@@ -2,7 +2,9 @@
 
 namespace Wazly;
 
+use Closure;
 use InvalidArgumentException;
+use UnexpectedValueException;
 
 class Revelation implements RevelationInterface
 {
@@ -22,6 +24,16 @@ class Revelation implements RevelationInterface
     {
         if ($original instanceof RevelationInterface) {
             throw new InvalidArgumentException('Argument 1 must not be an instance of RevelationInterface.');
+        } elseif ($original instanceof Closure) {
+            $this->original = $original(...$args);
+
+            if (! is_object($this->original)) {
+                throw new UnexpectedValueException('Closure of argument 1 must return a type of object.');
+            }
+
+            if ($this->original instanceof RevelationInterface) {
+                throw new UnexpectedValueException('Closure of argument 1 must not return a type of closure.');
+            }
         } elseif (is_object($original)) {
             $this->original = $original;
         } elseif (is_string($original)) {
@@ -31,7 +43,7 @@ class Revelation implements RevelationInterface
         }
     }
 
-    public function getOriginal(): object
+    public function getOriginal()
     {
         return $this->original;
     }

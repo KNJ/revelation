@@ -24,6 +24,12 @@ final class ConstructorTest extends TestCase
         $this->assertInstancesAndProperties($obj);
     }
 
+    public function testClosureRevelation()
+    {
+        $obj = Revelation::wrap(function ($x, $y) { return new Constructor($x, $y); }, 'a', 'b');
+        $this->assertInstancesAndProperties($obj);
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -39,6 +45,30 @@ final class ConstructorTest extends TestCase
     public function testRevelationOfRevelation(RevelationInterface $obj)
     {
         Revelation::wrap($obj, 'a', 'b');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testClosureReturnsVoid()
+    {
+        Revelation::wrap(function ($x, $y) { new Constructor($x, $y); }, 'a', 'b');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testClosureReturnsArray()
+    {
+        Revelation::wrap(function ($x, $y) { return [$x, $y]; }, 'a', 'b');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testClosureReturnsRevelation()
+    {
+        Revelation::wrap(function ($x, $y) { return Revelation::wrap(new Constructor($x, $y)); }, 'a', 'b');
     }
 
     private function assertInstancesAndProperties($obj)
