@@ -8,12 +8,12 @@ class Revelation implements RevelationInterface
 {
     protected $original;
 
-    public static function wrap($obj, ...$args)
+    public static function wrap($obj, ...$args): RevelationInterface
     {
         return new static($obj, ...$args);
     }
 
-    public static function clone($obj)
+    public static function clone($obj): RevelationInterface
     {
         return new static(clone $obj);
     }
@@ -31,12 +31,12 @@ class Revelation implements RevelationInterface
         }
     }
 
-    public function getOriginal()
+    public function getOriginal(): object
     {
         return $this->original;
     }
 
-    public function getStatic($property)
+    public function getStatic(string $property)
     {
         $closure = function ($original, $property) {
             return get_class($original)::$$property;
@@ -46,7 +46,7 @@ class Revelation implements RevelationInterface
         return $fn($this->original, $property);
     }
 
-    public function doStatic($method, ...$args)
+    public function doStatic(string $method, ...$args)
     {
         $self = $this;
         $closure = function ($original, $method, $args) use ($self) {
@@ -63,7 +63,7 @@ class Revelation implements RevelationInterface
         return $fn($this->original, $method, $args);
     }
 
-    public function __get($prop)
+    public function __get(string $prop)
     {
         $closure = function ($prop) {
             return $this->$prop;
@@ -73,7 +73,7 @@ class Revelation implements RevelationInterface
         return $fn($prop);
     }
 
-    public function __call($method, $args)
+    public function __call(string $method, $args)
     {
         $self = $this;
         $closure = function ($original, $method, $args) use ($self) {

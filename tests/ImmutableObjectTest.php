@@ -26,9 +26,14 @@ final class ImmutableObjectTest extends TestCase
         $this->assertSame('testing', $this->obj->returnSameValue('testing'));
     }
 
+    public function testSameReference()
+    {
+        $this->assertSame($this->original, Revelation::wrap($this->original)->getOriginal());
+    }
+
     public function testCloneObject()
     {
-        $this->assertNotSame($this->obj, Revelation::clone($this->original));
+        $this->assertNotSame($this->original, Revelation::clone($this->original)->getOriginal());
     }
 
     public function testStaticMethod()
