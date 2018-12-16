@@ -1,5 +1,6 @@
 {
     "name": "knj/revelation",
+    "description": "Easiest way to make non-public methods accessible",
     "type": "library",
     "license": "MIT",
     "authors": [
