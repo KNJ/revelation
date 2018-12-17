@@ -50,24 +50,24 @@ class Revelation implements RevelationInterface
 
     public function getStatic(string $property)
     {
-        $closure = function ($original, $property) {
-            return get_class($original)::$$property;
+        $closure = function ($property) {
+            return get_class($this)::$$property;
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($this->original, $property);
+        return $fn($property);
     }
 
     public function callStatic(string $method, ...$args)
     {
-        $closure = function ($original, $method, $args) {
-            $return = get_class($original)::$method(...$args);
+        $closure = function ($method, $args) {
+            $return = get_class($this)::$method(...$args);
 
             return $return;
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($this->original, $method, $args);
+        return $fn($method, $args);
     }
 
     public function __get(string $prop)
@@ -83,8 +83,8 @@ class Revelation implements RevelationInterface
     public function __call(string $method, $args)
     {
         $self = $this;
-        $closure = function ($original, $method, $args) use ($self) {
-            $return = $original->$method(...$args);
+        $closure = function ($method, $args) use ($self) {
+            $return = $this->$method(...$args);
 
             if ($return === $this) {
                 $return = $self;
@@ -94,6 +94,6 @@ class Revelation implements RevelationInterface
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($this->original, $method, $args);
+        return $fn($method, $args);
     }
 }
