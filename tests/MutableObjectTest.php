@@ -16,6 +16,12 @@ final class MutableObjectTest extends TestCase
         $this->exObj = Revelation::wrap(new class extends Mutable {});
     }
 
+    public function testSetPrivateProperty()
+    {
+        $this->obj->count = 100;
+        $this->assertSame(100, $this->obj->getOriginal()->getCount());
+    }
+
     public function testGetPrivateStaticProperty()
     {
         $this->assertSame(0, $this->obj->getStatic('number'));

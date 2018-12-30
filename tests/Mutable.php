@@ -13,6 +13,11 @@ class Mutable
         $this->count++;
     }
 
+    public function getCount()
+    {
+        return $this->count;
+    }
+
     public function changeSelfNumber($number)
     {
         self::$number = $number;

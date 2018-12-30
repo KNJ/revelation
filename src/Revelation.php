@@ -51,7 +51,7 @@ class Revelation implements RevelationInterface
     public function getStatic(string $property)
     {
         $closure = function ($property) {
-            return get_class($this)::$$property;
+            return get_class($this)::${$property};
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
@@ -73,11 +73,19 @@ class Revelation implements RevelationInterface
     public function __get(string $prop)
     {
         $closure = function ($prop) {
-            return $this->$prop;
+            return $this->{$prop};
         };
         $fn = $closure->bindTo($this->original, $this->original);
 
         return $fn($prop);
+    }
+
+    public function __set(string $prop, $val)
+    {
+        $closure = function ($prop, $val) {
+            $this->{$prop} = $val;
+        };
+        $closure->bindTo($this->original, $this->original)->__invoke($prop, $val);
     }
 
     public function __call(string $method, $args)
