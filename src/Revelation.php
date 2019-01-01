@@ -66,6 +66,23 @@ class Revelation implements RevelationInterface
         $closure->bindTo($this->original, $this->original)->__invoke($prop, $val);
     }
 
+    public function call(string $method, ...$args)
+    {
+        $self = $this;
+        $closure = function ($method, $args) use ($self) {
+            $return = $this->$method(...$args);
+
+            if ($return === $this) {
+                $return = $self;
+            }
+
+            return $return;
+        };
+        $fn = $closure->bindTo($this->original, $this->original);
+
+        return $fn($method, $args);
+    }
+
     public function callStatic(string $method, ...$args)
     {
         $closure = function ($method, $args) {
@@ -98,18 +115,6 @@ class Revelation implements RevelationInterface
 
     public function __call(string $method, $args)
     {
-        $self = $this;
-        $closure = function ($method, $args) use ($self) {
-            $return = $this->$method(...$args);
-
-            if ($return === $this) {
-                $return = $self;
-            }
-
-            return $return;
-        };
-        $fn = $closure->bindTo($this->original, $this->original);
-
-        return $fn($method, $args);
+        return $this->call($method, ...$args);
     }
 }
