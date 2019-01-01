@@ -58,6 +58,16 @@ final class MutableObjectTest extends TestCase
     /**
      * @depends testGetPrivateStaticProperty
      */
+    public function testSetPrivateStaticNumber()
+    {
+        $number = 8;
+        $this->obj->setStatic('number', $number);
+        $this->assertSame($number, $this->obj->getStatic('number'));
+    }
+
+    /**
+     * @depends testGetPrivateStaticProperty
+     */
     public function testChangePrivateStaticNumber()
     {
         $number = 9;

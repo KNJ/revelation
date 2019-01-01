@@ -58,6 +58,14 @@ class Revelation implements RevelationInterface
         return $fn($property);
     }
 
+    public function setStatic(string $prop, $val)
+    {
+        $closure = function ($prop, $val) {
+            get_class($this)::${$prop} = $val;
+        };
+        $closure->bindTo($this->original, $this->original)->__invoke($prop, $val);
+    }
+
     public function callStatic(string $method, ...$args)
     {
         $closure = function ($method, $args) {
