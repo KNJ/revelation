@@ -3,6 +3,7 @@
 namespace Wazly;
 
 use Closure;
+use ReflectionMethod;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
@@ -93,6 +94,13 @@ class Revelation implements RevelationInterface
         $fn = $closure->bindTo($this->original, $this->original);
 
         return $fn($method, $args);
+    }
+
+    public function makeClosure(Closure $cl): Closure
+    {
+        $fn = $cl->bindTo($this->original, $this->original);
+
+        return $fn;
     }
 
     public function __get(string $prop)
