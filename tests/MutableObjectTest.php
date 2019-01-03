@@ -49,7 +49,7 @@ final class MutableObjectTest extends TestCase
         $a = 100;
         $b = 10;
         $c = 1;
-        $cl = $this->obj->makeClosure(function($a, &$b, &$c) {
+        $cl = $this->obj->bind(function($a, &$b, &$c) {
             return $this->passReferenceVariables($a, $b, $c);
         });
         $result = $cl->__invoke($a, $b, $c);

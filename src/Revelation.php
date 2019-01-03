@@ -49,14 +49,20 @@ class Revelation implements RevelationInterface
         return $this->original;
     }
 
+    public function bind(Closure $cl): Closure
+    {
+        $fn = $cl->bindTo($this->original, $this->original);
+
+        return $fn;
+    }
+
     public function getStatic(string $property)
     {
         $closure = function ($property) {
             return get_class($this)::${$property};
         };
-        $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($property);
+        return $this->bind($closure)->__invoke($property);
     }
 
     public function setStatic(string $prop, $val)
@@ -64,7 +70,7 @@ class Revelation implements RevelationInterface
         $closure = function ($prop, $val) {
             get_class($this)::${$prop} = $val;
         };
-        $closure->bindTo($this->original, $this->original)->__invoke($prop, $val);
+        $this->bind($closure)->__invoke($prop, $val);
     }
 
     public function call(string $method, ...$args)
@@ -79,9 +85,8 @@ class Revelation implements RevelationInterface
 
             return $return;
         };
-        $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($method, $args);
+        return $this->bind($closure)->__invoke($method, $args);
     }
 
     public function callStatic(string $method, ...$args)
@@ -91,16 +96,8 @@ class Revelation implements RevelationInterface
 
             return $return;
         };
-        $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($method, $args);
-    }
-
-    public function makeClosure(Closure $cl): Closure
-    {
-        $fn = $cl->bindTo($this->original, $this->original);
-
-        return $fn;
+        return $this->bind($closure)->__invoke($method, $args);
     }
 
     public function __get(string $prop)
@@ -108,9 +105,8 @@ class Revelation implements RevelationInterface
         $closure = function ($prop) {
             return $this->{$prop};
         };
-        $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($prop);
+        return $this->bind($closure)->__invoke($prop);
     }
 
     public function __set(string $prop, $val)
@@ -118,7 +114,7 @@ class Revelation implements RevelationInterface
         $closure = function ($prop, $val) {
             $this->{$prop} = $val;
         };
-        $closure->bindTo($this->original, $this->original)->__invoke($prop, $val);
+        $this->bind($closure)->__invoke($prop, $val);
     }
 
     public function __call(string $method, $args)
