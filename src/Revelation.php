@@ -48,47 +48,31 @@ class Revelation implements RevelationInterface
         return $this->original;
     }
 
+    public function bind(Closure $cl): Closure
+    {
+        $fn = $cl->bindTo($this->original, $this->original);
+
+        return $fn;
+    }
+
     public function getStatic(string $property)
     {
         $closure = function ($property) {
             return get_class($this)::${$property};
         };
-        $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($property);
+        return $this->bind($closure)->__invoke($property);
     }
 
-    public function callStatic(string $method, ...$args)
-    {
-        $closure = function ($method, $args) {
-            $return = get_class($this)::$method(...$args);
-
-            return $return;
-        };
-        $fn = $closure->bindTo($this->original, $this->original);
-
-        return $fn($method, $args);
-    }
-
-    public function __get(string $prop)
-    {
-        $closure = function ($prop) {
-            return $this->{$prop};
-        };
-        $fn = $closure->bindTo($this->original, $this->original);
-
-        return $fn($prop);
-    }
-
-    public function __set(string $prop, $val)
+    public function setStatic(string $prop, $val)
     {
         $closure = function ($prop, $val) {
-            $this->{$prop} = $val;
+            get_class($this)::${$prop} = $val;
         };
-        $closure->bindTo($this->original, $this->original)->__invoke($prop, $val);
+        $this->bind($closure)->__invoke($prop, $val);
     }
 
-    public function __call(string $method, $args)
+    public function call(string $method, ...$args)
     {
         $self = $this;
         $closure = function ($method, $args) use ($self) {
@@ -100,8 +84,40 @@ class Revelation implements RevelationInterface
 
             return $return;
         };
-        $fn = $closure->bindTo($this->original, $this->original);
 
-        return $fn($method, $args);
+        return $this->bind($closure)->__invoke($method, $args);
+    }
+
+    public function callStatic(string $method, ...$args)
+    {
+        $closure = function ($method, $args) {
+            $return = get_class($this)::$method(...$args);
+
+            return $return;
+        };
+
+        return $this->bind($closure)->__invoke($method, $args);
+    }
+
+    public function __get(string $prop)
+    {
+        $closure = function ($prop) {
+            return $this->{$prop};
+        };
+
+        return $this->bind($closure)->__invoke($prop);
+    }
+
+    public function __set(string $prop, $val)
+    {
+        $closure = function ($prop, $val) {
+            $this->{$prop} = $val;
+        };
+        $this->bind($closure)->__invoke($prop, $val);
+    }
+
+    public function __call(string $method, $args)
+    {
+        return $this->call($method, ...$args);
     }
 }

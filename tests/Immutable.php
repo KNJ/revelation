@@ -19,6 +19,16 @@ class Immutable
         return $this;
     }
 
+    private function getOriginal()
+    {
+        return 'original';
+    }
+
+    private function call(string $str)
+    {
+        return $str;
+    }
+
     protected static function returnClassName()
     {
         return __CLASS__;

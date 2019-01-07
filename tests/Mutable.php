@@ -27,4 +27,14 @@ class Mutable
     {
         static::$number = $number;
     }
+
+    private function passReferenceVariables(int $val, int &$ref1, int &$ref2)
+    {
+        $val++;
+        $ref1++;
+        $ref2 += 2;
+        $this->count = $val + $ref1 + $ref2;
+
+        return $val + $ref1;
+    }
 }

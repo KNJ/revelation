@@ -22,11 +22,23 @@ final class ImmutableObjectTest extends TestCase
         });
     }
 
+    public function testCallOriginalMethod()
+    {
+        $this->assertSame('original', $this->obj->call('getOriginal'));
+        $this->assertSame('called!', $this->obj->call('call', 'called!'));
+    }
+
+    /**
+     * @depends testCallOriginalMethod
+     */
     public function testSingleArgument()
     {
         $this->assertSame('testing', $this->obj->returnSameValue('testing'));
     }
 
+    /**
+     * @depends testCallOriginalMethod
+     */
     public function testReturnThis()
     {
         $this->assertInstanceOf(RevelationInterface::class, $this->obj->returnThis());
