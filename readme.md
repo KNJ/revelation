@@ -37,9 +37,9 @@ echo reveal($obj)->do();
 
 ## Usage
 
-### Revelation object
+### Revelation Object
 
-Create a revelation object so that you can access non-public methods and properties.
+Create a Revelation object so that you can access non-public methods and properties.
 
 ```php
 <?php
@@ -76,7 +76,7 @@ $stuff->privateMethod(1, 100);
 echo $stuff->privateProperty;  // 101
 ```
 
-#### Ways to create a Revelation object
+#### Ways to Create a Revelation Object
 
 ```php
 // use function Wazly\Revelation\reveal;
@@ -90,7 +90,7 @@ Revelation::wrap(Stuff::class, 1, 2);
 Revelation::wrap(function ($a, $b) { return new Stuff($a, $b); }, 1, 2);
 ```
 
-#### Getting original object
+#### Getting Original Object
 
 `getOriginal()` retrieves reference to the original object.
 
@@ -100,7 +100,7 @@ echo get_class($stuff);                // Wazly\Revelation
 echo get_class($stuff->getOriginal()); // Stuff
 ```
 
-#### Reference to the original object
+#### Reference to the Original Object
 
 Revelation objects created with the same object have the same reference to the original object.
 
@@ -128,15 +128,15 @@ echo $rev1->privateProperty; // 3
 echo $rev2->privateProperty; // 7
 ```
 
-#### Method chaining
+#### Method Chaining
 
-`return $this` never return the original object itself so that a Revelation object can chain methods.
+`return $this` never return the original object itself so that the Revelation object can chain methods.
 
 ```php
 reveal($stuff)->privateMethod(1, 2)->privateMethod(3, 4);
 ```
 
-#### Static method and property
+#### Static Method and Property
 
 `getStatic()` and `callStatic()` are available.
 
@@ -173,4 +173,37 @@ echo reveal(B::class)->getStatic('staticProperty'); // static
 echo reveal(B::class)->callStatic('className');     // B
 echo reveal(B::class)->callStatic('selfName');      // A
 echo reveal(B::class)->callStatic('staticName');    // B
+```
+
+#### Passing Variables by Reference
+
+A method called from Revelation object cannot receive variables by referece because `__call()` cannot do so. This problem can be solved by making closure yourself:
+
+```php
+class X
+{
+    private function callPassByReferenceMethod($val, &$ref)
+    {
+        static::passByReference($val, $ref);
+    }
+
+    private static function passByReference($val, &$ref)
+    {
+        $ref = $ref ?? 1;
+        $ref += $val;
+    }
+}
+
+$closure1 = reveal(X::class)->bind(function ($val, &$ref) {
+    $this->callPassByReferenceMethod($val, $ref);
+});
+
+$closure2 = reveal(X::class)->bind(function ($val, &$ref) {
+    static::passByReference($val, $ref);
+});
+
+$closure1(99, $ref);
+echo $ref; // 100
+$closure2(100, $ref);
+echo $ref; // 200
 ```
