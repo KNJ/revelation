@@ -3,7 +3,6 @@
 namespace Wazly;
 
 use Closure;
-use ReflectionMethod;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
